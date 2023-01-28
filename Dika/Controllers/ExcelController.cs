@@ -25,7 +25,7 @@ namespace Dika.Controllers
                 file.CopyTo(stream);
             }
             var excel = new ExcelQueryFactory(filePath);
-            var rows = (from row in excel.Worksheet<Invertory>() select row).ToList();
+            var rows = (from row in excel.WorksheetRangeNoHeader("A1", "Z100") select row).ToList();
 
             // do the rest of your import logic here, such as saving to the database
             return View(rows);
