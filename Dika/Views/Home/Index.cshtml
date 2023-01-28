@@ -1,0 +1,26 @@
+﻿<table class="table table-active">
+    <tr>
+        <td>პროდუქტის დასახელება<td>
+        <td>SKU კოდი</td>
+        <td>შტრიხკოდი</td>
+        <td>ფასი</td>
+        <td style ="color:green">ასახული რაოდენობა</td>
+        <td style="color:red" >მოწოდებული რაოდენობა</td>
+        <td style="color:blue" >სხვაობა</td>
+    </tr>
+   @* @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.SKU</td>
+            <td>@item.Barcode</td>
+            <td>@item.QuantityOfProvider</td>
+            <td>@item.Name</td>
+            <td>@item.Price</td>
+        </tr>
+    }*@
+
+</table>
+<form action="Excel/Import" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" id="file" />
+    <input type="submit" value="Import" />
+</form>
