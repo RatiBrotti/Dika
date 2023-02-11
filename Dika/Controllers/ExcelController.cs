@@ -3,34 +3,53 @@ using Grpc.Core;
 using LinqToExcel;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using LinqToExcel.Extensions;
+using Dika.Tools;
+using Dika.Context;
 
 namespace Dika.Controllers
 {
     public class ExcelController : Controller
     {
-        private readonly IWebHostEnvironment _hostingEnvironment;
+        protected DikaContext _db;
 
-        public ExcelController(IWebHostEnvironment hostingEnvironment)
+        public ExcelController(DikaContext db)
         {
-            _hostingEnvironment = hostingEnvironment;
+            _db = db;
         }
 
-        public IActionResult Import()
-        {
-            var file = Request.Form.Files[0];
-            var fileName = Path.GetFileName(file.FileName);
-            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "App_Data", fileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                file.CopyTo(stream);
-            }
-            var excel = new ExcelQueryFactory(filePath);
-            var rows = (from row in excel.WorksheetRangeNoHeader("A1", "Z100") select row).ToList();
 
-            // do the rest of your import logic here, such as saving to the database
-            return View(rows);
+        public async Task<IActionResult> ImportNoSKU(IFormFile exel)
+        {
+            if (exel == null) return BadRequest("No file was Uploaded");
+
+
+            var dataList = await ExcelTools.NoSKUTableConverter(exel);
+            _db.Invertories.AddRange(dataList);
+            _db.SaveChanges();
+
+            return View(dataList);
+
+
         }
-              
+
+
+
+
+        public async Task<IActionResult> ImportSKU(IFormFile exel)
+        {
+            if (exel == null) return BadRequest("No file was Uploaded");
+
+
+            var dataList = await ExcelTools.SKUTableConverter(exel);
+
+            return View(dataList);
+        }
+
+
 
     }
 }

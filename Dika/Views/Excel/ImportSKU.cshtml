@@ -1,0 +1,30 @@
+﻿@model List<Dika.Models.Invertory>
+<table class="table table-active">
+    <tr>
+        <td>პროდუქტის დასახელება</td>
+        <td>SKU კოდი</td>
+        <td>შტრიხკოდი</td>
+        <td>ზომა</td>
+        <td style="color:red">მოწოდებული რაოდენობა</td>
+        <td style="color:green">ასახული რაოდენობა</td>
+        <td style="color:blue">სხვაობა</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.SKU</td>
+            <td>@item.Barcode</td>
+            <td>@item.Size</td>
+            <td>@item.QuantityOfProvider</td>
+            <td>@item.QuantityCounted</td>
+            <td>
+                @{
+                    var difference = item.QuantityOfProvider - item.QuantityCounted;
+                }
+
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,26 +1,115 @@
-﻿<table class="table table-active">
+﻿@model List<Dika.Models.Invertory>
+
+<form method="post" enctype="multipart/form-data" asp-controller="Excel" asp-action="ImportSKU">
+    <div class="form-group">
+        <label for="file">ფაილი SKU კოდით</label>
+        <input type="file" class="form-control-file" id="file" name="exel">
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
+@if (Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Barcode</th>
+                <th>Quantity of Provider</th>
+                <th>Size</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.SKU</td>
+                    <td>@item.Name</td>
+                    <td>@item.Barcode</td>
+                    <td>@item.QuantityOfProvider</td>
+                    <td>@item.Size</td>
+                    <td>@item.Price</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<form method="post" enctype="multipart/form-data" asp-controller="Excel" asp-action="ImportNoSKU">
+    <div class="form-group">
+        <label for="file">ფაილი SKU გარეშე</label>
+        <input type="file" class="form-control-file" id="file" name="exel">
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
+@if (Model != null)
+{
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>SKU</th>
+                    <th>Name</th>
+                    <th>Barcode</th>
+                    <th>Quantity of Provider</th>
+                    <th>Size</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                        <tr>
+                            <td>@item.SKU</td>
+                            <td>@item.Name</td>
+                            <td>@item.Barcode</td>
+                            <td>@item.QuantityOfProvider</td>
+                            <td>@item.Size</td>
+                            <td>@item.Price</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}
+
+
+
+
+
+
+
+
+
+@*@model List<Dika.Models.Invertory>
+ <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
+    <div class="container">
+        <form method="post" asp-controller="Excel" asp-action="Import" enctype="multipart/form-data">
+            <input type="file" name="file"/>
+            <button type="submit">Import</button>
+        </form>
+
+    </div>
+</div>*@
+@*<table class="table table-active">
     <tr>
-        <td>პროდუქტის დასახელება<td>
+        <td>პროდუქტის დასახელება
+        <td>
         <td>SKU კოდი</td>
         <td>შტრიხკოდი</td>
-        <td>ფასი</td>
-        <td style ="color:green">ასახული რაოდენობა</td>
-        <td style="color:red" >მოწოდებული რაოდენობა</td>
-        <td style="color:blue" >სხვაობა</td>
+        <td style="color:green">ასახული რაოდენობა</td>
+        <td style="color:red">მოწოდებული რაოდენობა</td>
+        <td style="color:blue">სხვაობა</td>
     </tr>
-   @* @foreach (var item in Model)
+    @foreach (var item in Model)
     {
         <tr>
             <td>@item.SKU</td>
             <td>@item.Barcode</td>
             <td>@item.QuantityOfProvider</td>
             <td>@item.Name</td>
-            <td>@item.Price</td>
         </tr>
-    }*@
+    }
 
 </table>
-<form action="Excel/Import" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" id="file" />
-    <input type="submit" value="Import" />
-</form>
+*@
