@@ -9,6 +9,7 @@ using NPOI.SS.UserModel;
 using LinqToExcel.Extensions;
 using Dika.Tools;
 using Dika.Context;
+using Azure.Messaging;
 
 namespace Dika.Controllers
 {
@@ -26,8 +27,13 @@ namespace Dika.Controllers
         {
             if (exel == null) return BadRequest("No file was Uploaded");
 
-
             var dataList = await ExcelTools.NoSKUTableConverter(exel);
+            var doubleBarcodes = await ExcelTools.CheckForDoubles(dataList);
+            if (doubleBarcodes.Count != 0)
+            {
+                ViewBag.Error = "ექსელის ფაილში არის დუბლირებული შტრიხკოდები:" + String.Join(",", doubleBarcodes);
+                return View();
+            }
             _db.Invertories.AddRange(dataList);
             _db.SaveChanges();
 

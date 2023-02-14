@@ -6,6 +6,19 @@ namespace Dika.Tools
 {
     public class ExcelTools
     {
+        public static async Task<List<string>> CheckForDoubles(List<Invertory> invertories)
+        {
+            List<string> doubleBarcodeList = new List<string>();
+            for(int i = 0; i < invertories.Count; i++)
+            {
+                for(int j = 0; j < invertories.Count; j++)
+                {
+                    if (invertories[i].Barcode == invertories[j].Barcode) doubleBarcodeList.Add(invertories[i].Barcode);
+                }
+            }
+            return doubleBarcodeList;
+        }
+
         public static async Task<List<Invertory>> SKUTableConverter(IFormFile exel)
         {
             var inventoryList = new List<Invertory>();
@@ -55,7 +68,10 @@ namespace Dika.Tools
                 for (int rowIndex = 1; rowIndex <= rowCount; rowIndex++)
                 {
                     var row = worksheet.GetRow(rowIndex);
-
+                    if(row.PhysicalNumberOfCells==0)
+                    {
+                        continue;
+                    }
                     inventoryList.Add(new Invertory
                     {
                         Name = row.GetCell(0).ToString().Trim(),
