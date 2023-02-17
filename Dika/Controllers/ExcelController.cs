@@ -25,17 +25,26 @@ namespace Dika.Controllers
 
         public async Task<IActionResult> ImportNoSKU(IFormFile exel)
         {
-            if (exel == null) return BadRequest("No file was Uploaded");
+            ViewBag.Error = "აირჩიეთ ფაილი";
+            if (exel == null) return RedirectToAction("Index", "Home", new { error = ViewBag.Error });
 
             var dataList = await ExcelTools.NoSKUTableConverter(exel);
-            var doubleBarcodes = await ExcelTools.CheckForDoubles(dataList);
-            if (doubleBarcodes.Count != 0)
-            {
-                ViewBag.Error = "ექსელის ფაილში არის დუბლირებული შტრიხკოდები:" + String.Join(",", doubleBarcodes);
-                return View();
-            }
-            _db.Invertories.AddRange(dataList);
-            _db.SaveChanges();
+            dataList = ExcelTools.AddDoubles(dataList);
+
+
+
+            //for (int i = 0; i < dataList.Count; i++)
+            //{
+            //    var dbMatch=_db.Invertories.FirstOrDefault(x=>x.Barcode== dataList[i].Barcode);
+            //    if (dbMatch != null)
+            //    {
+            //        dbMatch.QuantityOfProvider= dbMatch.QuantityOfProvider + dataList[i].QuantityOfProvider;
+            //        dataList.Remove(dataList[i]);
+            //    }
+            //}
+            //_db.Invertories.AddRange(dataList);
+            //_db.SaveChanges();
+            //var dbInvertories=_db.Invertories.ToList();
 
             return View(dataList);
 
@@ -47,13 +56,20 @@ namespace Dika.Controllers
 
         public async Task<IActionResult> ImportSKU(IFormFile exel)
         {
-            if (exel == null) return BadRequest("No file was Uploaded");
-
+            ViewBag.Error = "აირჩიეთ ფაილი";
+            if (exel == null) return RedirectToAction("Index", "Home", new { error = ViewBag.Error });
 
             var dataList = await ExcelTools.SKUTableConverter(exel);
+            var doubleBarcodes = ExcelTools.AddDoubles(dataList);
+            if (doubleBarcodes.Count != 0)
+            {
+                ViewBag.Error = "ექსელის ფაილში არის დუბლირებული შტრიხკოდები: " + String.Join(",", doubleBarcodes);
+                return RedirectToAction("Index", "Home", new { error = ViewBag.Error });
+            }
 
             return View(dataList);
         }
+
 
 
 

@@ -7,7 +7,10 @@
     </div>
     <button type="submit" class="btn btn-primary">Upload</button>
 </form>
-
+@if(Model==null)
+        {
+<h1 class="text-danger" >@ViewBag.Error</h1>
+        }
 @if (Model != null)
 {
     <table class="table">

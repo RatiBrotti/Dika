@@ -1,22 +1,41 @@
-﻿using Dika.Models;
+﻿using Dika.Context;
+using Dika.Models;
 using NPOI.HSSF.UserModel;
+using NPOI.OpenXmlFormats;
 using OfficeOpenXml;
+using Dika.Context;
 
 namespace Dika.Tools
 {
     public class ExcelTools
     {
-        public static async Task<List<string>> CheckForDoubles(List<Invertory> invertories)
+        protected DikaContext _db;
+        public ExcelTools(DikaContext db)
         {
-            List<string> doubleBarcodeList = new List<string>();
+            _db = db;
+        }
+        public static List<Invertory> AddDoubles(List<Invertory> invertories)
+        {
+            List<Invertory> modifiedList=new List<Invertory>();
+            
             for(int i = 0; i < invertories.Count; i++)
             {
-                for(int j = 0; j < invertories.Count; j++)
-                {
-                    if (invertories[i].Barcode == invertories[j].Barcode) doubleBarcodeList.Add(invertories[i].Barcode);
+                
+                for (int j = i+1; j < invertories.Count; j++)
+                {                    
+                    if (invertories[i].Barcode == invertories[j].Barcode)
+                    {
+                        modifiedList.Add(invertories[i]);
+                        modifiedList[i].QuantityOfProvider = modifiedList[i].QuantityOfProvider + invertories[j].QuantityOfProvider;
+            
+                    }
+                    else
+                    {
+                        modifiedList.Add(invertories[i]);
+                    }
                 }
             }
-            return doubleBarcodeList;
+            return modifiedList;
         }
 
         public static async Task<List<Invertory>> SKUTableConverter(IFormFile exel)
@@ -36,7 +55,10 @@ namespace Dika.Tools
                 for (int rowIndex = 1; rowIndex <= rowCount; rowIndex++)
                 {
                     var row = worksheet.GetRow(rowIndex);
-
+                    if (row.PhysicalNumberOfCells == 0 || row.Cells.All(cell => string.IsNullOrWhiteSpace(cell.ToString())))
+                    {
+                        continue;
+                    }
                     inventoryList.Add(new Invertory
                     {
                         SKU = row.GetCell(0).ToString().Trim(),
@@ -53,6 +75,7 @@ namespace Dika.Tools
         }
         public static async Task<List<Invertory>> NoSKUTableConverter(IFormFile exel)
         {
+         
             var inventoryList = new List<Invertory>();
             if (exel.ContentType == "application/vnd.ms-excel" || exel.FileName.Contains("xsl"))
             {
@@ -68,7 +91,7 @@ namespace Dika.Tools
                 for (int rowIndex = 1; rowIndex <= rowCount; rowIndex++)
                 {
                     var row = worksheet.GetRow(rowIndex);
-                    if(row.PhysicalNumberOfCells==0)
+                    if(row.PhysicalNumberOfCells==0 || row.Cells.All(cell=>string.IsNullOrWhiteSpace(cell.ToString())))
                     {
                         continue;
                     }
@@ -84,7 +107,7 @@ namespace Dika.Tools
             }
             return inventoryList;
 
-        }
+        }              
     }
 }
 

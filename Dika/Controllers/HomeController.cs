@@ -14,8 +14,9 @@ namespace Dika.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string error)
         {
+            ViewBag.Error = error;
             return View();
         }
 
