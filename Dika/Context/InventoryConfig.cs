@@ -27,7 +27,7 @@ namespace Dika.Context
                 .HasMaxLength(15);
 
             builder.Property(e=>e.Price)
-                .HasColumnType("Float");        
+                .HasColumnType("decimal(10,2)");
         }
     }
 

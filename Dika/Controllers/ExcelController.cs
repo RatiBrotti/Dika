@@ -29,25 +29,35 @@ namespace Dika.Controllers
             if (exel == null) return RedirectToAction("Index", "Home", new { error = ViewBag.Error });
 
             var dataList = await ExcelTools.NoSKUTableConverter(exel);
-            dataList = ExcelTools.AddDoubles(dataList);
+            var sumBarcodes = ExcelTools.JoinAndSum(dataList);
+
+            foreach (var item in sumBarcodes)
+            {
+                var dbmatch = _db.Invertories.FirstOrDefault(x => x.Barcode == item.Barcode);
+                if (dbmatch != null)
+                {
+                    dbmatch.QuantityOfProvider += item.QuantityOfProvider;
+                }
+                else
+                {
+                    var newInventory = new Invertory
+                    {
+                        Barcode = item.Barcode,
+                        QuantityOfProvider = item.QuantityOfProvider,
+                        Name = item.Name,
+                        SKU = item.SKU,
+                        Size = item.Size,
+                        Price = item.Price,
+                        QuantityCounted = item.QuantityCounted,
+
+                    };
+                    _db.Invertories.Add(newInventory);
+                }
+            }
+            _db.SaveChanges();
 
 
-
-            //for (int i = 0; i < dataList.Count; i++)
-            //{
-            //    var dbMatch=_db.Invertories.FirstOrDefault(x=>x.Barcode== dataList[i].Barcode);
-            //    if (dbMatch != null)
-            //    {
-            //        dbMatch.QuantityOfProvider= dbMatch.QuantityOfProvider + dataList[i].QuantityOfProvider;
-            //        dataList.Remove(dataList[i]);
-            //    }
-            //}
-            //_db.Invertories.AddRange(dataList);
-            //_db.SaveChanges();
-            //var dbInvertories=_db.Invertories.ToList();
-
-            return View(dataList);
-
+            return View(_db.Invertories.ToList());
 
         }
 
@@ -60,7 +70,7 @@ namespace Dika.Controllers
             if (exel == null) return RedirectToAction("Index", "Home", new { error = ViewBag.Error });
 
             var dataList = await ExcelTools.SKUTableConverter(exel);
-            var doubleBarcodes = ExcelTools.AddDoubles(dataList);
+            var doubleBarcodes = ExcelTools.JoinAndSum(dataList);
             if (doubleBarcodes.Count != 0)
             {
                 ViewBag.Error = "ექსელის ფაილში არის დუბლირებული შტრიხკოდები: " + String.Join(",", doubleBarcodes);
