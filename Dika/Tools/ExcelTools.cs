@@ -14,24 +14,29 @@ namespace Dika.Tools
         {
             _db = db;
         }
-        public static List<Invertory> JoinAndSum(List<Invertory> inventories)
+        public static List<Invertory> AddDoubles(List<Invertory> invertories)
         {
-            var groupedInventories = inventories.GroupBy(i => i.Barcode)
-                                                .Select(group =>
-                                                    new Invertory
-                                                    {
-                                                        Barcode = group.Key,
-                                                        QuantityOfProvider = group.Sum(i => i.QuantityOfProvider),
-                                                        Name = group.First().Name,
-                                                        SKU = group.First().SKU,
-                                                        Size = group.First().Size,
-                                                        QuantityCounted = group.First().QuantityCounted,
-                                                        Price = group.First().Price
-                                                    })
-                                                .ToList();
-            return groupedInventories;
-        }
+            List<Invertory> modifiedList=new List<Invertory>();
+            
+            for(int i = 0; i < invertories.Count; i++)
+            {
+                
+                for (int j = i+1; j < invertories.Count; j++)
+                {                    
+                    if (invertories[i].Barcode != invertories[j].Barcode)
+                    {
+                        modifiedList.Add(invertories[i]);
+                    }
+                    else
+                    {
+                        modifiedList.Add(invertories[i]);
+                        modifiedList[i].QuantityOfProvider = modifiedList[i].QuantityOfProvider + invertories[j].QuantityOfProvider;
 
+                    }
+                }
+            }
+            return modifiedList;
+        }
 
         public static async Task<List<Invertory>> SKUTableConverter(IFormFile exel)
         {
