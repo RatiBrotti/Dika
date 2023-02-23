@@ -81,9 +81,9 @@ namespace Dika.Controllers
             return View(entities);
         }
         [HttpGet]
-        public IActionResult Inventorying()
+        public IActionResult Inventorying(Invertory entity)
         {
-            return View();
+            return View(entity);
         }
         [HttpPost]
         public IActionResult AddByBarcode(string barcode)
