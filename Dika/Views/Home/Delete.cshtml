@@ -1,0 +1,37 @@
+﻿@model Dika.Models.Invertory
+<div>
+    <h4>პროდუქტის დეტალები</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">დასახელება:</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">SKU კოდი:</dt>
+        <dd class="col-sm-9">@Model.SKU</dd>
+
+        <dt class="col-sm-3">შტრიხკოდი:</dt>
+        <dd class="col-sm-9">@Model.Barcode</dd>
+
+        <dt class="col-sm-3">ზომა:</dt>
+        <dd class="col-sm-9">@Model.Size</dd>
+
+        <dt class="col-sm-3">ფასი:</dt>
+        <dd class="col-sm-9">@Model.Price</dd>
+
+        <dt class="col-sm-3">მოწოდებული რაოდენობა:</dt>
+        <dd class="col-sm-9">@Model.QuantityOfProvider</dd>
+
+        <dt class="col-sm-3">ასახული რაოდენობა:</dt>
+        <dd class="col-sm-9">@Model.QuantityCounted</dd>
+    </dl>
+    <br />
+    <form method="post" action="Delete">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">წაშლა</button>
+    </form>
+    <br />
+    <br />
+    <a href="Home\Index" class="btn btn-info">უკან დაბრუნება</a>
+</div>
+
+

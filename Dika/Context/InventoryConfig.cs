@@ -18,8 +18,11 @@ namespace Dika.Context
                 .HasMaxLength(50);
 
             builder.Property(e => e.Barcode)
-                .HasMaxLength(50);
+                .HasMaxLength(50);   
 
+            builder.HasIndex(e=>e.Barcode)
+                .IsUnique();
+               
             builder.Property(e=>e.SKU)
                 .HasMaxLength(50);
 

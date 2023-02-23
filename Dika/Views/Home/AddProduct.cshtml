@@ -1,0 +1,40 @@
+﻿<div>
+    @if (ViewBag.error != null)
+    {
+        <h1 style="color:red">@ViewBag.error</h1>
+    }
+</div>
+<form method="post" action="AddProduct">
+    <div class="form-group">
+        <label for="name">პროდუქტის დასახელება</label>
+        <input type="text" class="form-control" id="name" name="Name"  />
+    </div>
+    <div class="form-group">
+        <label for="sku">SKU კოდი</label>
+        <input type="text" class="form-control" id="sku" name="SKU" />
+    </div>
+    <div class="form-group">
+        <label for="barcode">შტრიხკოდი</label>
+        <input type="text" class="form-control" id="barcode" name="Barcode"  />
+    </div>
+    <div class="form-group">
+        <label for="size">ზომა</label>
+        <input type="text" class="form-control" id="size" name="Size"  />
+    </div>
+    <div class="form-group">
+        <label for="price">ფასი</label>
+        <input type="text" class="form-control" id="price" name="Price"  />
+    </div>
+    <div class="form-group">
+        <label for="quantityOfProvider">მოწოდებული რაოდენობა</label>
+        <input type="text" class="form-control" id="quantityOfProvider" name="QuantityOfProvider"  />
+    </div>
+    <div class="form-group">
+        <label for="quantityCounted">ასახული რაოდენობა</label>
+        <input type="text" class="form-control" id="quantityCounted" name="QuantityCounted"  />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">დამატება</button>
+    <br /><br /><br />
+
+</form>

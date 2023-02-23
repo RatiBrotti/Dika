@@ -1,6 +1,14 @@
 ﻿@model List<Dika.Models.Invertory>
-<table class="table table-active">
+
+<div>
+    @if (ViewBag.error != null)
+    {
+        <h1 style="color:red">@ViewData["error"]</h1>
+    }
+</div>
+<table class="table table-striped table-bordered">
     <tr>
+        <td>Id</td>
         <td>პროდუქტის დასახელება</td>
         <td>SKU კოდი</td>
         <td>შტრიხკოდი</td>
@@ -9,24 +17,38 @@
         <td style="color:red">მოწოდებული რაოდენობა</td>
         <td style="color:green">ასახული რაოდენობა</td>
         <td style="color:blue">სხვაობა</td>
+        <td></td>
+        <td></td>
     </tr>
+    @{
+        int i = 0;
+    }
     @foreach (var item in Model)
     {
         <tr>
+            <td>@i</td>
             <td>@item.Name</td>
             <td>@item.SKU</td>
             <td>@item.Barcode</td>
             <td>@item.Size</td>
             <td>@item.Price</td>
-            <td>@item.QuantityOfProvider</td>
-            <td>@item.QuantityCounted</td>
-            <td>
+            <td style="color:red">@item.QuantityOfProvider</td>
+            <td style="color:green">@item.QuantityCounted</td>
+            <td style="color:blue">
                 @{
                     var difference = item.QuantityOfProvider - item.QuantityCounted;
                 }
+                @difference
 
             </td>
+            <td>
+                <a style="color:blue" class="btn btn-warning" href="Home\Edit?id=@item.Id">შეცვლა</a>
+            </td>
+            <td>
+                <a style="color:black" class="btn btn-danger" href="Home\Delete?id=@item.Id">წაშლა</a>
+            </td>
         </tr>
+        i++;
     }
 
 </table>

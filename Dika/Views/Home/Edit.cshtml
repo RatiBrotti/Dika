@@ -1,0 +1,38 @@
+﻿@model Dika.Models.Invertory
+
+<form method="post" action="Edit">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <div class="form-group">
+        <label for="name">პროდუქტის დასახელება</label>
+        <input type="text" class="form-control" id="name" name="Name" value="@Model.Name" />
+    </div>
+    <div class="form-group">
+        <label for="sku">SKU კოდი</label>
+        <input type="text" class="form-control" id="sku" name="SKU" value="@Model.SKU" />
+    </div>
+    <div class="form-group">
+        <label for="barcode">შტრიხკოდი</label>
+        <input type="text" class="form-control" id="barcode" name="Barcode" value="@Model.Barcode" />
+    </div>
+    <div class="form-group">
+        <label for="size">ზომა</label>
+        <input type="text" class="form-control" id="size" name="Size" value="@Model.Size" />
+    </div>
+    <div class="form-group">
+        <label for="price">ფასი</label>
+        <input type="text" class="form-control" id="price" name="Price" value="@Model.Price" />
+    </div>
+    <div class="form-group">
+        <label for="quantityOfProvider">მოწოდებული რაოდენობა</label>
+        <input type="text" class="form-control" id="quantityOfProvider" name="QuantityOfProvider" value="@Model.QuantityOfProvider" />
+    </div>
+    <div class="form-group">
+        <label for="quantityCounted">ასახული რაოდენობა</label>
+        <input type="text" class="form-control" id="quantityCounted" name="QuantityCounted" value="@Model.QuantityCounted" />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">განახლება</button>
+    <br /><br /><br />
+    <a class="btn btn-danger" href="Delete?id=@Model.Id">წაშლა</a>
+</form>
+

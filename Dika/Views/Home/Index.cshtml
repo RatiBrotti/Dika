@@ -1,80 +1,62 @@
 ﻿@model List<Dika.Models.Invertory>
 
-<form method="post" enctype="multipart/form-data" asp-controller="Excel" asp-action="ImportSKU">
-    <div class="form-group">
-        <label for="file">ფაილი SKU კოდით</label>
-        <input type="file" class="form-control-file" id="file" name="exel">
-    </div>
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
-@if(Model==null)
-        {
-<h1 class="text-danger" >@ViewBag.Error</h1>
-        }
-@if (Model != null)
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>SKU</th>
-                <th>Name</th>
-                <th>Barcode</th>
-                <th>Quantity of Provider</th>
-                <th>Size</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.SKU</td>
-                    <td>@item.Name</td>
-                    <td>@item.Barcode</td>
-                    <td>@item.QuantityOfProvider</td>
-                    <td>@item.Size</td>
-                    <td>@item.Price</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-<form method="post" enctype="multipart/form-data" asp-controller="Excel" asp-action="ImportNoSKU">
-    <div class="form-group">
-        <label for="file">ფაილი SKU გარეშე</label>
-        <input type="file" class="form-control-file" id="file" name="exel">
-    </div>
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
 
-@if (Model != null)
-{
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>SKU</th>
-                    <th>Name</th>
-                    <th>Barcode</th>
-                    <th>Quantity of Provider</th>
-                    <th>Size</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model)
-            {
-                        <tr>
-                            <td>@item.SKU</td>
-                            <td>@item.Name</td>
-                            <td>@item.Barcode</td>
-                            <td>@item.QuantityOfProvider</td>
-                            <td>@item.Size</td>
-                            <td>@item.Price</td>
-                        </tr>
-            }
-            </tbody>
-        </table>
-}
+<div>
+    @if (ViewBag.error != null)
+    {
+        <h1 style="color:red">@ViewData["error"]</h1>
+    }
+</div>
+<table class="table table-striped table-bordered">
+    <tr>
+        <td>Id</td>
+        <td>პროდუქტის დასახელება</td>
+        <td>SKU კოდი</td>
+        <td>შტრიხკოდი</td>
+        <td>ზომა</td>
+        <td>ფასი</td>
+        <td style="color:red">მოწოდებული რაოდენობა</td>
+        <td style="color:green">ასახული რაოდენობა</td>
+        <td style="color:blue">სხვაობა</td>
+        <td></td>
+        <td></td>
+    </tr>
+    @{
+        int i = 0;
+    }
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@i</td>
+            <td>@item.Name</td>
+            <td>@item.SKU</td>
+            <td>@item.Barcode</td>
+            <td>@item.Size</td>
+            <td>@item.Price</td>
+            <td style="color:red">@item.QuantityOfProvider</td>
+            <td style="color:green">@item.QuantityCounted</td>
+            <td style="color:blue">
+                @{
+                    var difference = item.QuantityOfProvider - item.QuantityCounted;
+                }
+                @difference
+
+            </td>
+            <td>
+                <a style="color:blue" class="btn btn-warning" href="Home\Edit?id=@item.Id">შეცვლა</a>
+            </td>
+            <td>
+                <a style="color:black" class="btn btn-danger" href="Home\Delete?id=@item.Id">წაშლა</a>
+            </td>
+        </tr>
+        i++;
+    }
+
+</table>
+
+
+
+
 
 
 

@@ -29,9 +29,9 @@ namespace Dika.Controllers
             if (exel == null) return RedirectToAction("Index", "Home", new { error = ViewBag.Error });
 
             var dataList = await ExcelTools.NoSKUTableConverter(exel);
-            var sumBarcodes = ExcelTools.JoinAndSum(dataList);
+            var joinedBarcodes = ExcelTools.JoinAndSum(dataList);
 
-            foreach (var item in sumBarcodes)
+            foreach (var item in joinedBarcodes)
             {
                 var dbmatch = _db.Invertories.FirstOrDefault(x => x.Barcode == item.Barcode);
                 if (dbmatch != null)
@@ -57,7 +57,7 @@ namespace Dika.Controllers
             _db.SaveChanges();
 
 
-            return View(_db.Invertories.ToList());
+            return RedirectToAction("Index","Home");
 
         }
 
@@ -70,14 +70,34 @@ namespace Dika.Controllers
             if (exel == null) return RedirectToAction("Index", "Home", new { error = ViewBag.Error });
 
             var dataList = await ExcelTools.SKUTableConverter(exel);
-            var doubleBarcodes = ExcelTools.JoinAndSum(dataList);
-            if (doubleBarcodes.Count != 0)
-            {
-                ViewBag.Error = "ექსელის ფაილში არის დუბლირებული შტრიხკოდები: " + String.Join(",", doubleBarcodes);
-                return RedirectToAction("Index", "Home", new { error = ViewBag.Error });
-            }
+            var joinedBarcodes = ExcelTools.JoinAndSum(dataList);
 
-            return View(dataList);
+            foreach (var item in joinedBarcodes)
+            {
+                var dbmatch = _db.Invertories.FirstOrDefault(x => x.Barcode == item.Barcode);
+                if (dbmatch != null)
+                {
+                    dbmatch.QuantityOfProvider += item.QuantityOfProvider;
+                }
+                else
+                {
+                    var newInventory = new Invertory
+                    {
+                        Barcode = item.Barcode,
+                        QuantityOfProvider = item.QuantityOfProvider,
+                        Name = item.Name,
+                        SKU = item.SKU,
+                        Size = item.Size,
+                        Price = item.Price,
+                        QuantityCounted = item.QuantityCounted,
+
+                    };
+                    _db.Invertories.Add(newInventory);
+                }
+            }
+            _db.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
 
 

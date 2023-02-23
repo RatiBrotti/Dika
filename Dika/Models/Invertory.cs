@@ -11,6 +11,6 @@
         public string? Size { get; set; }
         public int QuantityOfProvider { get; set; }
         public int QuantityCounted { get; set; }
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
     }
 }
