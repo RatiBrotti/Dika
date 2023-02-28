@@ -36,21 +36,53 @@
         <form method="post" asp-controller="Home" asp-action="AddByBarcode">
             <div class="form-group">
                 <label for="name">დასახელება:</label>
-                <input type="text" class="form-control" id="name" name="Barcode" required>
+                <input autofocus type="text" class="form-control" id="name" name="Barcode" required>
             </div>
             <button type="submit" class="btn btn-primary">დამატება</button>
         </form>
     </div>
 </body>
+<h1 style="color:red">@ViewBag.error</h1>
 @{
     if (Model != null)
     {
-        <table>
-        <tr>
-        <td>
-        @Model.Barcode 
-        </td>
-        </tr>
+        <h1 style="color:green">
+            დაემატება წარმატებით დასრულდა!
+        </h1>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <td>პროდუქტის დასახელება</td>
+                <td>SKU კოდი</td>
+                <td>შტრიხკოდი</td>
+                <td>ზომა</td>
+                <td>ფასი</td>
+                <td style="color:red">მოწოდებული რაოდენობა</td>
+                <td style="color:green">ასახული რაოდენობა</td>
+                <td style="color:blue">სხვაობა</td>
+
+            </tr>
+           
+                <tr>
+
+                    <td>@Model.Name</td>
+                    <td>@Model.SKU</td>
+                    <td>@Model.Barcode</td>
+                    <td>@Model.Size</td>
+                    <td>@Model.Price</td>
+                    <td style="color:red">@Model.QuantityOfProvider</td>
+                    <td style="color:green">@Model.QuantityCounted</td>
+                    <td style="color:blue">
+                        @{
+                            var difference = Model.QuantityOfProvider - Model.QuantityCounted;
+                        }
+                        @difference
+
+                    </td>
+
+                </tr>
+           
+            
+
         </table>
     }
 }

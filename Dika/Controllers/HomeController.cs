@@ -77,18 +77,33 @@ namespace Dika.Controllers
                 return RedirectToAction("Index", new { ViewBag.error });
             }
             var entities = _db.Invertories.Where(x => x.Barcode.Contains(search.Trim()) || x.SKU.Contains(search.Trim()) || x.Name.Contains(search.ToUpper().Trim())).ToList();
-
+            if (entities.Count == 0)
+            {
+                ViewBag.error = "საძიებო ტექსტით: " + search + "! ჩანაწერი ვერ მოიძებნა";
+                return RedirectToAction("Index", new { ViewBag.error });
+            }
             return View(entities);
         }
         [HttpGet]
-        public IActionResult Inventorying(Invertory entity)
+        public IActionResult Inventorying(Invertory entity, string error)
         {
+            if (error != null)
+            {
+                ViewBag.error = error;
+                return View();
+            }
+            
             return View(entity);
         }
         [HttpPost]
         public IActionResult AddByBarcode(string barcode)
         {
             var entity = _db.Invertories.FirstOrDefault(x => x.Barcode == barcode);
+            if(entity==null)
+            {
+                ViewBag.error = "პროდუქტი შტრიხ კოდით: " + barcode + "! არ არსებობს";
+                return RedirectToAction("Inventorying",new { ViewBag.error });
+            }
             entity.QuantityCounted++;
             _db.SaveChanges();
 
