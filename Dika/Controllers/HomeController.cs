@@ -18,7 +18,10 @@ namespace Dika.Controllers
             _db = db;
             _logger = logger;
         }
-
+        public IActionResult Js()
+        {
+            return View();
+        }
         public IActionResult Index(string error)
         {
             ViewBag.error = error;
